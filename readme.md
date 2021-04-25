@@ -16,7 +16,6 @@ The utility monitors the usb bus using the pyudev module. If it sees a change th
 enumerates the pulseaudio devices and compares them against what you have set as the
 "preferred" device. If it finds a match then it goes to work.
 
-
 This utility saves its settings in ~/.pulsmonrc so it should reliably remember
 state between runs. Set it to start at login and you should be good to go (I think.)
 
