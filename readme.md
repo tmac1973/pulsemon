@@ -1,9 +1,9 @@
 
 <h1> What? </h1>
-Pulsemon allow you to pick a pulseaudio output (sink) and input (source) as
+Pulsemon allows you to pick a pulseaudio output (sink) and input (source) as
 the preferred device. It will then monitor for changes to usb bus. If your preferred
-pulseaudio sound device is removed and then re-added later it will auto select that
-device as "active". 
+pulseaudio sound device is removed and then re-added later it will remember that
+device and restore it to its rightful state as "active".  
 
 <h1> Why? </h1>
 I wrote this because I have 3 sound devices (webcam, mic, usb sound card) all plugged
