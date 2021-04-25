@@ -12,17 +12,18 @@ problem is when I switch back to my linux box the wrong sound devices would alwa
 get selected as "active". This tool solves the problem. 
 
 <h1> How? </h1>
-The way pulsemon works is it looks for changes to the devices on the usb bus using
-the pyudev module. If it sees a change then it enumerates the pulseaudio devices 
-and compares them against what you have set as the "preferred" device. If it finds
-a match then it goes to work.
+The utility monitors the usb bus using the pyudev module. If it sees a change then it
+enumerates the pulseaudio devices and compares them against what you have set as the
+"preferred" device. If it finds a match then it goes to work.
 
 This utility saves its settings in ~/.pulsmonrc so it should reliably remember
 state between runs. Set it to start at login and you should be good to go (I think.)
 
 <h1> Future? </h1>
-I could probably change it to monitor pulseaudio directly instead of the usb bus
-though pyudev but that's for another day. Hope this helps someone out. 
+I could probably change it to monitor pulseaudio directly for changes instead of 
+monitoring the usb bus through pyudev but that's for another day.
+
+Hope this helps someone out. 
 
 <h1> Install? </h1>
 
@@ -31,8 +32,8 @@ Solus Linux 4.2.
 
 https://github.com/voltaire321/pulsemon/releases
 
-Alternatively you could clone this archive run from the source. If you're gonna do
-that you probably know how to use "pipenv" to create the environment for it to run
+Alternatively you could clone this archive and run from the source. If you're gonna
+do that you probably know how to use "pipenv" to create the environment for it to run
 in. 
 
 Also I've included a pyinstaller .spec file if you need to roll your own. 
