@@ -1,7 +1,7 @@
 
 <h1> What? </h1>
 Pulsemon allows you to pick a pulseaudio output (sink) and input (source) as
-the preferred device. It will then monitor for changes to usb bus. If your preferred
+the preferred devices. It will then monitor for changes to usb bus. If your preferred
 pulseaudio sound device is removed and then re-added later it will remember that
 device and restore it to its rightful state as "active".  
 
