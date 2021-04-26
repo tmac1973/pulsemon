@@ -29,7 +29,8 @@ import qtmodern.styles
 import qtmodern.windows
 import pathlib
 import json
-from qtpy import QtWidgets, uic
+from qtpy import QtWidgets, QtGui, uic
+from time import sleep
 
 
 class USBSoundMonitor(QtWidgets.QMainWindow):
@@ -44,6 +45,22 @@ class USBSoundMonitor(QtWidgets.QMainWindow):
         gui = pathlib.Path(basedir + '/ui/pulsemon.ui')
         uic.loadUi(gui, self)
         self.center()
+
+        # set up the system tray
+
+        icon = QtGui.QIcon(basedir + '/ui/pulse.svg')
+        tray = QtWidgets.QSystemTrayIcon(icon, self)
+        tray.setToolTip("Pulsemon")
+        tray.setVisible(True)
+        menu = QtWidgets.QMenu()
+        show = QtWidgets.QAction("Show", self)
+        show.triggered.connect(self.restore)
+        quit = QtWidgets.QAction("Quit", self)
+        quit.triggered.connect(QtWidgets.qApp.quit)
+        menu.addAction(show)
+        menu.addAction(quit)
+        tray.setContextMenu(menu)
+        tray.show()
 
         # setup udev monitor to look for USB changes
         context = Context()
@@ -70,6 +87,15 @@ class USBSoundMonitor(QtWidgets.QMainWindow):
         self.pushButtonSetInput.clicked.connect(self.set_preferred_source)
         self.pushButtonClearOutput.clicked.connect(self.clear_preferred_output)
         self.pushButtonClearInput.clicked.connect(self.clear_preferred_source)
+
+    def closeEvent(self, event):
+        event.ignore()
+        self.hide()
+
+    def restore(self):
+        print('restoring')
+        self.show()
+        self.center()
 
     def center(self):
         qr = self.frameGeometry()
@@ -137,7 +163,6 @@ class USBSoundMonitor(QtWidgets.QMainWindow):
             list_item.index = output.index
             list_item.name = output.name
             list_item.description = output.description
-            list_item.sink = output
             self.listWidgetOutputDevices.addItem(list_item)
 
     def populate_sources(self):
@@ -148,7 +173,6 @@ class USBSoundMonitor(QtWidgets.QMainWindow):
             list_item.index = source.index
             list_item.name = source.name
             list_item.description = source.description
-            list_item.source = source
             self.listWidgetInputDevices.addItem(list_item)
 
     def get_pulseaudio_sinks(self):
@@ -162,6 +186,9 @@ class USBSoundMonitor(QtWidgets.QMainWindow):
         return sources
 
     def device_connected(self):
+        # was getting a core dump from pulsectl occasionaly so I'm thinking I need to wait
+        # for pulseaudio to discover the new device before I do this, so I'm gonna sleep
+        sleep(0.25)
         self.populate_outputs()
         self.populate_sources()
         if self.monitor:
@@ -178,8 +205,8 @@ class USBSoundMonitor(QtWidgets.QMainWindow):
 
 
 def main():
-
     app = QtWidgets.QApplication(sys.argv)
+    app.setQuitOnLastWindowClosed(False)
     qtmodern.styles.dark(app)
     window = qtmodern.windows.ModernWindow(USBSoundMonitor())
     window.show()
